@@ -37,7 +37,7 @@ public class SnakeGame extends JPanel implements ActionListener {
         JFrame window = new JFrame();
         window.add(this);
         window.setTitle("Snake");
-        window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
         window.setResizable(false);
         window.setVisible(true);
@@ -66,10 +66,10 @@ public class SnakeGame extends JPanel implements ActionListener {
 
     public void draw(Graphics g) {
         //Draw snake
-        for (Rectangle square : snake.body) {
+        snake.body.forEach(square -> {
             g.setColor(Color.green);
             g.fillRect(square.x, square.y, PIXEL_SIZE, PIXEL_SIZE);
-        }
+        });
 
         //Draw apple
         g.setColor(Color.red);
@@ -143,10 +143,8 @@ public class SnakeGame extends JPanel implements ActionListener {
 
     public void restart() {
         points = 0;
-        snake = new Snake();
-        DELAY = 100;
-        TIMER.setDelay(DELAY);
-        randomizeApple();
+        TIMER.stop();
+        start();
     }
 
     public void increaseSpeed() {
@@ -164,42 +162,30 @@ public class SnakeGame extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                case KeyEvent.VK_A:
+                case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
                     if (snake.direction != Snake.Direction.RIGHT) {
                         snake.direction = Snake.Direction.LEFT;
                     }
-                    break;
-                case KeyEvent.VK_RIGHT:
-                case KeyEvent.VK_D:
+                }
+                case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
                     if (snake.direction != Snake.Direction.LEFT) {
                         snake.direction = Snake.Direction.RIGHT;
                     }
-                    break;
-                case KeyEvent.VK_UP:
-                case KeyEvent.VK_W:
+                }
+                case KeyEvent.VK_UP, KeyEvent.VK_W -> {
                     if (snake.direction != Snake.Direction.DOWN) {
                         snake.direction = Snake.Direction.UP;
                     }
-                    break;
-                case KeyEvent.VK_DOWN:
-                case KeyEvent.VK_S:
+                }
+                case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                     if (snake.direction != Snake.Direction.UP) {
                         snake.direction = Snake.Direction.DOWN;
                     }
-                    break;
-                case KeyEvent.VK_R:
-                    restart();
-                    break;
-                case KeyEvent.VK_I:
-                    increaseSpeed();
-                    break;
-                case KeyEvent.VK_O:
-                    decreaseSpeed();
-                    break;
-                case KeyEvent.VK_Q:
-                    System.exit(0);
-                    break;
+                }
+                case KeyEvent.VK_R -> restart();
+                case KeyEvent.VK_I -> increaseSpeed();
+                case KeyEvent.VK_O -> decreaseSpeed();
+                case KeyEvent.VK_Q -> System.exit(0);
             }
         }
     }
